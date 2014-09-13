@@ -11,11 +11,11 @@ Data::Tab - Iterators as tabular data structures
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -347,7 +347,7 @@ The C<show> method is thus C<show_generic('|', 1, 1)>.
 Unfortunately, C<show_generic> isn't generic enough to express an HTML table, and I considered putting a show_html
 method here as well (L<Data::Table> has one) - but honestly, it's rare to use undecorated HTML these days, so I
 elected to remove temptation from your path.  To generate HTML, you should use a template engine to generate
-I<good> HTML.  Eventually I'll write one that works with D::T::Lazy out of the box - drop me a line if you'd like me
+I<good> HTML.  Eventually I'll write one that works with Data::Tab out of the box - drop me a line if you'd like me
 to accelerate that.
 
 =cut
@@ -544,10 +544,12 @@ Done.
 package Data::Tab::db;
 
 use Data::Tab;
-use DBI;
+use Carp;
 
 sub connect {
    my $self = bless ({}, shift);
+   eval "use DBI";
+   croak "DBI not installed" if $@;
    $self->{dbh} = DBI->connect(@_);
    $self;
 }
